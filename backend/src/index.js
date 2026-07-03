@@ -1,15 +1,21 @@
-import dotenv from "dotenv";
-import connectDB from "./db/index.js";
+import http from "http";
 import app from "./app.js";
+import { connectRedis } from "./config/redis.js";
+import { initWebSocket } from "./config/ws.js";
 
-dotenv.config({ path: './.env' });
-connectDB()
-  .then(() => {
-    app.listen(process.env.PORT, () => {
-      console.log(`Server is running on port ${process.env.PORT}`);
+const PORT = process.env.PORT || 3000;
+
+const server = http.createServer(app);
+
+initWebSocket(server);
+
+connectRedis()
+    .then(() => {
+        server.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+    })
+    .catch((err) => {
+        console.error("Failed to connect to Redis. Server not started.", err);
+        process.exit(1);
     });
-  })
-  .catch((error) => {
-    console.error("Database connection failed:", error);
-    process.exit(1);
-  });
