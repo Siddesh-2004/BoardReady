@@ -17,7 +17,6 @@ app.use(express.urlencoded({
 }));
 app.use(express.static("public"));
 
-
 export default app;
 
 
