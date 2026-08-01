@@ -6,4 +6,4 @@ const connectionString = process.env.NODE_ENV === 'test'
 
 const db = drizzle({ connection: connectionString });
 
-export default db;
+export { db };
