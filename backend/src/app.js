@@ -17,6 +17,12 @@ app.use(express.urlencoded({
 }));
 app.use(express.static("public"));
 
+
+
+import boardRoutes from "./routes/board.routes.js";
+app.use("/api/v2/boards", boardRoutes);
+
+
 export default app;
 
 
