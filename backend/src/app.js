@@ -22,7 +22,8 @@ app.use(express.static("public"));
 import boardRoutes from "./routes/board.routes.js";
 app.use("/api/v2/boards", boardRoutes);
 
-
+import scoreRoutes from "./routes/score.route.js";
+app.use("/api/v2/scores", scoreRoutes);
 export default app;
 
 

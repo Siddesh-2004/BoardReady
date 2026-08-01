@@ -45,7 +45,7 @@ const handleWatcherConnection = async (socket, req) => {
     const boardId = extractBoardIdFromPath(req.url, "/ws/");
 
     const board = await getBoardByName(boardId);
-    if (!board) {   
+    if (!board) {
         socket.close(1008, "Board does not exist");
         return;
     }
@@ -108,4 +108,4 @@ const handleSubmitterConnection = async (socket, req) => {
     });
 };
 
-export { handleWatcherConnection, handleSubmitterConnection };
+export { handleWatcherConnection, handleSubmitterConnection, broadcastToWatchers };

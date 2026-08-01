@@ -1,6 +1,6 @@
-import { ApiError } from "../utils/apiErrors.js";
-import ApiResponse from "../utils/apiResponse.js";
-import asyncHandler from "../utils/asynchandler.js";
+import { ApiError } from "../utils/ApiError.js";
+import ApiResponse from "../utils/ApiResponse.js";
+import asyncHandler from "../utils/asyncHandler.js";
 import { createBoard as createBoardService } from "../services/board.service.js";
 
 const VALID_MODES = ["realtime", "rest"];
@@ -22,9 +22,12 @@ const createBoard = asyncHandler(async (req, res) => {
         allowedOrigin: allowedOrigin || null,
     });
 
+    const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
+    const leaderboardUrl = `${protocol}://${board.name}.${process.env.BASE_DOMAIN}`;
+
     return res
         .status(201)
-        .json(new ApiResponse(board, "Board created successfully", 201));
+        .json(new ApiResponse({ ...board, leaderboardUrl }, "Board created successfully", 201));
 });
 
 export { createBoard };
