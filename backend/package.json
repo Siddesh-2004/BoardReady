@@ -5,16 +5,22 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon --env-file=.env src/index.js"
-  },
+    "dev": "nodemon --env-file=.env src/index.js",
+   "test": "docker compose -f docker-compose.test.yml up -d && sleep 3 && npx drizzle-kit push --config=drizzle.config.testdb.js --force && vitest run; docker compose -f docker-compose.test.yml down -v"
+  },    
   "author": "Siddesh poojary",
   "license": "ISC",
   "devDependencies": {
+    "@testcontainers/postgresql": "^12.0.4",
+    "@testcontainers/redis": "^12.0.4",
     "@types/pg": "^8.20.3",
+    "cross-env": "^10.1.0",
     "drizzle-kit": "^1.0.0-rc.4",
     "nodemon": "^3.1.10",
     "prettier": "^3.6.2",
-    "tsx": "^4.23.1"
+    "testcontainers": "^12.0.4",
+    "tsx": "^4.23.1",
+    "vitest": "^4.1.10"
   },
   "dependencies": {
     "cors": "^2.8.5",

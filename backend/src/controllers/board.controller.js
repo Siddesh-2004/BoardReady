@@ -1,6 +1,6 @@
-import { ApiError } from "../utils/ApiError.js";
-import ApiResponse from "../utils/ApiResponse.js";
-import asyncHandler from "../utils/asyncHandler.js";
+import { ApiError } from "../utils/apiErrors.js";
+import ApiResponse from "../utils/apiResponse.js";
+import asyncHandler from "../utils/asynchandler.js";
 import { createBoard as createBoardService } from "../services/board.service.js";
 
 const VALID_MODES = ["realtime", "rest"];

@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import { eq } from "drizzle-orm";
 import { db } from "../db/index.js";
-import { boards } from "../db/board.schema.js";
+import { boards } from "../db/schemas/board.schema.js";
 import { ApiError } from "../utils/apiErrors.js";
 
 const generateApiKey = () => {
