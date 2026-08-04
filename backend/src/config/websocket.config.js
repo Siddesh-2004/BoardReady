@@ -1,18 +1,45 @@
 import { WebSocketServer } from "ws";
-import { handleConnection, handleMessage, handleClose } from "../services/websocket.service.js";
+import {
+    handleWatcherConnection,
+    handleSubmitterConnection,
+} from "../services/websocket.service.js";
 
-let wss;
+let watchWss;
+let submitWss;
 
 const initWebSocket = (server) => {
-    wss = new WebSocketServer({ server });
+    watchWss = new WebSocketServer({ noServer: true });
+    submitWss = new WebSocketServer({ noServer: true });
 
-    wss.on("connection", (socket) => {
-        handleConnection(socket, wss);
-        socket.on("message", (data) => handleMessage(socket, data, wss));
-        socket.on("close", () => handleClose(socket, wss));
+    server.on("upgrade", (req, socket, head) => {
+        if (req.url.startsWith("/submit/")) {
+            submitWss.handleUpgrade(req, socket, head, (ws) => {
+                submitWss.emit("connection", ws, req);
+            });
+        } else if (req.url.startsWith("/ws/")) {
+            watchWss.handleUpgrade(req, socket, head, (ws) => {
+                watchWss.emit("connection", ws, req);
+            });
+        } else {
+            socket.destroy();
+        }
     });
 
-    return wss;
+    watchWss.on("connection", (socket, req) => {
+        handleWatcherConnection(socket, req, watchWss);
+
+        socket.on("message", (data) => {
+            // watchers are read-only; ignore any messages they send
+        });
+
+        socket.on("close", () => {
+            // cleanup handled inside handleWatcherConnection's returned cleanup, if needed
+        });
+    });
+
+    submitWss.on("connection", (socket, req) => {
+        handleSubmitterConnection(socket, req, submitWss);
+    });
 };
 
 export { initWebSocket };

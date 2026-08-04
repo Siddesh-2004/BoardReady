@@ -1,0 +1,24 @@
+services:
+  redis_test:
+    image: redis:7-alpine
+    container_name: leaderboard-redis-test
+    ports:
+      - "${REDIS_TEST_PORT:-6380}:6379"
+    volumes:
+      - redis-data-test:/data
+
+  postgres_test:
+    image: postgres:16-alpine
+    container_name: leaderboard-postgres-test
+    ports:
+      - "${POSTGRES_TEST_PORT:-5433}:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB_TEST}
+    volumes:
+      - postgres-data-test:/var/lib/postgresql/data
+
+volumes:
+  redis-data-test:
+  postgres-data-test:

@@ -9,13 +9,14 @@ const server = http.createServer(app);
 
 initWebSocket(server);
 
-connectRedis()
-    .then(() => {
+(async () => {
+    try {
+        await connectRedis();
         server.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
         });
-    })
-    .catch((err) => {
+    } catch (err) {
         console.error("Failed to connect to Redis. Server not started.", err);
         process.exit(1);
-    });
+    }
+})();

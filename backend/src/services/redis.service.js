@@ -1,6 +1,5 @@
 import { redisClient } from "../config/redis.config.js";
 
-
 const boardKey = (boardId) => `leaderboard:${boardId}`;
 
 const addScore = async (boardId, name, score) => {
@@ -17,14 +16,8 @@ const getTopScores = async (boardId, limit = 10) => {
     return result;
 };
 
-const broadcastLeaderboard = (boardId, data) => {
-    // later: only send to clients subscribed to this boardId's room
-    // for v1: broadcast to everyone, boardId currently unused here
+const deleteBoard = async (boardId) => {
+    await redisClient.del(boardKey(boardId));
 };
 
-
-const deleteBoard=async ()=>{
-    await redisClient.del("leaderboard:main");
-}
-
-export {addScore, getTopScores, deleteBoard}
+export { addScore, getTopScores, deleteBoard }; 
